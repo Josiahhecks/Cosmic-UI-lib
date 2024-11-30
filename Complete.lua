@@ -1,108 +1,128 @@
+--[[ 
+    Nebula UI Library
+    Created by josiahhecks
+    Version 2.0.0
+]]
+
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local CoreGui = game:GetService("CoreGui")
 local RunService = game:GetService("RunService")
 
-local Library = {
-    Flags = {},
+local Nebula = {
+    Icons = {
+        Square = "rbxassetid://14635164959",
+        Circle = "rbxassetid://14635165511",
+        Star = "rbxassetid://14635166105"
+    },
     Theme = {
-        Background = Color3.fromRGB(30, 30, 30),
-        Accent = Color3.fromRGB(0, 255, 128),
-        Text = Color3.fromRGB(255, 255, 255),
-        DarkContrast = Color3.fromRGB(20, 20, 20),
-        LightContrast = Color3.fromRGB(40, 40, 40)
+        Primary = Color3.fromRGB(20, 20, 30),
+        Secondary = Color3.fromRGB(30, 30, 45),
+        Accent = Color3.fromRGB(96, 130, 255),
+        Text = Color3.fromRGB(240, 240, 255),
+        Divider = Color3.fromRGB(40, 40, 60)
     }
 }
 
-function Library:Create(class, properties)
+-- Utility Functions
+function Nebula:Create(class, properties)
     local instance = Instance.new(class)
-    
-    for property, value in pairs(properties) do
-        instance[property] = value
+    for prop, value in pairs(properties) do
+        instance[prop] = value
     end
-    
     return instance
 end
 
-function Library:CreateWindow(title)
+function Nebula:Tween(instance, properties, duration)
+    return TweenService:Create(instance, TweenInfo.new(duration, Enum.EasingStyle.Quart), properties)
+end
+
+function Nebula:CreateWindow(title)
     local Window = {}
     
-    -- Main GUI Creation
-    Window.Screen = Library:Create("ScreenGui", {
-        Name = title,
-        Parent = CoreGui
+    -- Main GUI
+    Window.Screen = self:Create("ScreenGui", {
+        Name = "NebulaUI",
+        Parent = CoreGui,
+        ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     })
     
-    Window.Main = Library:Create("Frame", {
+    Window.Main = self:Create("Frame", {
         Name = "Main",
         Parent = Window.Screen,
-        BackgroundColor3 = Library.Theme.Background,
+        BackgroundColor3 = self.Theme.Primary,
         BorderSizePixel = 0,
         Position = UDim2.new(0.5, -300, 0.5, -200),
-        Size = UDim2.new(0, 600, 0, 400)
+        Size = UDim2.new(0, 600, 0, 400),
+        ClipsDescendants = true
     })
     
-    -- Add Corner
-    Library:Create("UICorner", {
+    -- Add Gradient
+    local UIGradient = self:Create("UIGradient", {
         Parent = Window.Main,
-        CornerRadius = UDim.new(0, 6)
+        Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, self.Theme.Primary),
+            ColorSequenceKeypoint.new(1, self.Theme.Secondary)
+        }),
+        Rotation = 45
     })
     
-    -- Title Bar
-    Window.TitleBar = Library:Create("Frame", {
+    -- Title Bar with Premium Design
+    Window.TitleBar = self:Create("Frame", {
         Name = "TitleBar",
         Parent = Window.Main,
-        BackgroundColor3 = Library.Theme.DarkContrast,
+        BackgroundColor3 = self.Theme.Secondary,
         BorderSizePixel = 0,
         Size = UDim2.new(1, 0, 0, 30)
     })
     
-    Library:Create("UICorner", {
-        Parent = Window.TitleBar,
-        CornerRadius = UDim.new(0, 6)
-    })
-    
-    -- Title Text
-    Window.Title = Library:Create("TextLabel", {
+    -- Title with Icon
+    Window.TitleIcon = self:Create("ImageLabel", {
         Parent = Window.TitleBar,
         BackgroundTransparency = 1,
-        Position = UDim2.new(0, 10, 0, 0),
-        Size = UDim2.new(1, -20, 1, 0),
+        Position = UDim2.new(0, 5, 0, 5),
+        Size = UDim2.new(0, 20, 0, 20),
+        Image = self.Icons.Star
+    })
+    
+    Window.Title = self:Create("TextLabel", {
+        Parent = Window.TitleBar,
+        BackgroundTransparency = 1,
+        Position = UDim2.new(0, 30, 0, 0),
+        Size = UDim2.new(1, -30, 1, 0),
         Font = Enum.Font.GothamBold,
         Text = title,
-        TextColor3 = Library.Theme.Text,
+        TextColor3 = self.Theme.Text,
         TextSize = 14,
         TextXAlignment = Enum.TextXAlignment.Left
     })
     
-    -- Tab Container
-    Window.TabContainer = Library:Create("Frame", {
-        Name = "TabContainer",
+    -- Content Area
+    Window.ContentArea = self:Create("Frame", {
+        Name = "ContentArea",
         Parent = Window.Main,
-        BackgroundColor3 = Library.Theme.DarkContrast,
+        BackgroundTransparency = 1,
+        Position = UDim2.new(0, 0, 0, 30),
+        Size = UDim2.new(1, 0, 1, -30)
+    })
+    
+    -- Tab System
+    Window.TabHolder = self:Create("Frame", {
+        Name = "TabHolder",
+        Parent = Window.ContentArea,
+        BackgroundColor3 = self.Theme.Secondary,
         BorderSizePixel = 0,
-        Position = UDim2.new(0, 10, 0, 40),
-        Size = UDim2.new(0, 150, 1, -50)
+        Position = UDim2.new(0, 5, 0, 5),
+        Size = UDim2.new(0, 120, 1, -10)
     })
     
-    Library:Create("UICorner", {
-        Parent = Window.TabContainer,
-        CornerRadius = UDim.new(0, 6)
-    })
-    
-    -- Content Container
-    Window.ContentContainer = Library:Create("Frame", {
-        Name = "ContentContainer",
-        Parent = Window.Main,
-        BackgroundColor3 = Library.Theme.DarkContrast,
+    Window.TabContent = self:Create("Frame", {
+        Name = "TabContent",
+        Parent = Window.ContentArea,
+        BackgroundColor3 = self.Theme.Secondary,
         BorderSizePixel = 0,
-        Position = UDim2.new(0, 170, 0, 40),
-        Size = UDim2.new(1, -180, 1, -50)
-    })
-    
-    Library:Create("UICorner", {
-        Parent = Window.ContentContainer,
-        CornerRadius = UDim.new(0, 6)
+        Position = UDim2.new(0, 130, 0, 5),
+        Size = UDim2.new(1, -135, 1, -10)
     })
     
     -- Make Window Draggable
@@ -135,99 +155,82 @@ function Library:CreateWindow(title)
         end
     end)
     
-    function Window:AddTab(name)
+    -- Tab Creation
+    function Window:AddTab(name, icon)
         local Tab = {}
         
-        -- Tab Button
-        Tab.Button = Library:Create("TextButton", {
-            Name = name,
-            Parent = Window.TabContainer,
-            BackgroundColor3 = Library.Theme.LightContrast,
+        Tab.Button = Nebula:Create("TextButton", {
+            Parent = Window.TabHolder,
+            BackgroundColor3 = Nebula.Theme.Primary,
             BorderSizePixel = 0,
             Size = UDim2.new(1, -10, 0, 30),
-            Font = Enum.Font.Gotham,
             Text = name,
-            TextColor3 = Library.Theme.Text,
-            TextSize = 14
+            Font = Enum.Font.GothamSemibold,
+            TextColor3 = Nebula.Theme.Text,
+            TextSize = 12
         })
         
-        Library:Create("UICorner", {
-            Parent = Tab.Button,
-            CornerRadius = UDim.new(0, 6)
-        })
+        if icon then
+            local Icon = Nebula:Create("ImageLabel", {
+                Parent = Tab.Button,
+                BackgroundTransparency = 1,
+                Position = UDim2.new(0, 5, 0.5, -8),
+                Size = UDim2.new(0, 16, 0, 16),
+                Image = Nebula.Icons[icon]
+            })
+            Tab.Button.TextPadding = UDim.new(0, 25)
+        end
         
-        -- Tab Content
-        Tab.Content = Library:Create("ScrollingFrame", {
-            Name = name,
-            Parent = Window.ContentContainer,
+        Tab.Container = Nebula:Create("ScrollingFrame", {
+            Parent = Window.TabContent,
             BackgroundTransparency = 1,
-            BorderSizePixel = 0,
             Size = UDim2.new(1, 0, 1, 0),
-            CanvasSize = UDim2.new(0, 0, 0, 0),
-            ScrollBarThickness = 4,
+            ScrollBarThickness = 2,
             Visible = false
         })
         
         -- Add Elements Functions
-        function Tab:AddToggle(text, default, callback)
-            local Toggle = {}
-            
-            Toggle.Button = Library:Create("TextButton", {
-                Parent = Tab.Content,
-                BackgroundColor3 = Library.Theme.LightContrast,
+        function Tab:AddDivider(text)
+            local Divider = Nebula:Create("Frame", {
+                Parent = Tab.Container,
+                BackgroundColor3 = Nebula.Theme.Divider,
                 BorderSizePixel = 0,
-                Size = UDim2.new(1, -20, 0, 30),
-                Font = Enum.Font.Gotham,
-                Text = text,
-                TextColor3 = Library.Theme.Text,
-                TextSize = 14
+                Size = UDim2.new(1, -20, 0, 2),
+                Position = UDim2.new(0, 10, 0, #Tab.Container:GetChildren() * 35)
             })
             
-            Toggle.Indicator = Library:Create("Frame", {
-                Parent = Toggle.Button,
-                BackgroundColor3 = default and Library.Theme.Accent or Library.Theme.DarkContrast,
-                BorderSizePixel = 0,
-                Position = UDim2.new(1, -40, 0.5, -10),
-                Size = UDim2.new(0, 20, 0, 20)
-            })
-            
-            Library:Create("UICorner", {
-                Parent = Toggle.Indicator,
-                CornerRadius = UDim.new(0, 4)
-            })
-            
-            Toggle.Button.MouseButton1Click:Connect(function()
-                default = not default
-                Toggle.Indicator.BackgroundColor3 = default and Library.Theme.Accent or Library.Theme.DarkContrast
-                callback(default)
-            end)
-            
-            return Toggle
-        end
-        
-        function Tab:AddSlider(text, min, max, default, callback)
-            local Slider = {}
-            
-            Slider.Container = Library:Create("Frame", {
-                Parent = Tab.Content,
-                BackgroundColor3 = Library.Theme.LightContrast,
-                BorderSizePixel = 0,
-                Size = UDim2.new(1, -20, 0, 50)
-            })
-            
-            -- Add slider implementation here
-            
-            return Slider
-        end
-        
-        -- Tab Button Click Handler
-        Tab.Button.MouseButton1Click:Connect(function()
-            for _, tab in pairs(Window.ContentContainer:GetChildren()) do
-                if tab:IsA("ScrollingFrame") then
-                    tab.Visible = tab == Tab.Content
-                end
+            if text then
+                local Label = Nebula:Create("TextLabel", {
+                    Parent = Divider,
+                    BackgroundColor3 = Nebula.Theme.Secondary,
+                    Position = UDim2.new(0.5, -25, -0.5, 0),
+                    Size = UDim2.new(0, 50, 0, 16),
+                    Font = Enum.Font.GothamBold,
+                    Text = text,
+                    TextColor3 = Nebula.Theme.Text,
+                    TextSize = 10
+                })
             end
-        end)
+        end
+        
+        function Tab:AddButton(text, callback)
+            local Button = Nebula:Create("TextButton", {
+                Parent = Tab.Container,
+                BackgroundColor3 = Nebula.Theme.Secondary,
+                BorderSizePixel = 0,
+                Position = UDim2.new(0, 10, 0, #Tab.Container:GetChildren() * 35),
+                Size = UDim2.new(1, -20, 0, 30),
+                Font = Enum.Font.GothamSemibold,
+                Text = text,
+                TextColor3 = Nebula.Theme.Text,
+                TextSize = 12
+            })
+            
+            Button.MouseButton1Click:Connect(callback)
+            return Button
+        end
+        
+        -- Add more element functions here (Toggle, Slider, etc.)
         
         return Tab
     end
@@ -235,4 +238,4 @@ function Library:CreateWindow(title)
     return Window
 end
 
-return Library
+return Nebula
