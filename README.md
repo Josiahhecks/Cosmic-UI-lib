@@ -6,24 +6,24 @@ A premium, space-themed UI library crafted for elite Roblox development. Feature
 
 ```lua
 local Nebula = loadstring(game:HttpGet('https://raw.githubusercontent.com/Josiahhecks/Nebula-UI-lib/refs/heads/main/Complete.lua'))()
-
+--------------------------------------------------------------------------
 local Window = Nebula:CreateWindow("My Premium Script")
-
+--------------------------------------------------------------------------
 ✨ Premium Features
 Create tabs with custom icons:
 
 local MainTab = Window:AddTab("Main", "Star") -- Star, Square, or Circle
-
+--------------------------------------------------------------------------
 Add stylish dividers:
 
 MainTab:AddDivider("Combat Features")
-
+--------------------------------------------------------------------------
 Create premium buttons:
 
 MainTab:AddButton("Activate", function()
     print("Activated!")
 end)
-
+--------------------------------------------------------------------------
 🎨 Theme Customization
 Nebula.Theme = {
     Primary = Color3.fromRGB(20, 20, 30),
@@ -32,7 +32,7 @@ Nebula.Theme = {
     Text = Color3.fromRGB(240, 240, 255),
     Divider = Color3.fromRGB(40, 40, 60)
 }
-
+--------------------------------------------------------------------------
 ⚡ Key Features
 Custom Icon System
 Smooth Gradient Animations
@@ -41,6 +41,7 @@ Enhanced Tab System
 Professional Design
 Theme Customization
 Performance Optimized
+--------------------------------------------------------------------------
 🌟 Elite Example
 local Window = Nebula:CreateWindow("Elite Script")
 
