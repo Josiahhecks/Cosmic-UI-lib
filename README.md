@@ -1,65 +1,62 @@
-# Nebula UI Library
+# 🌌 Nebula UI Library
 
-A powerful, modern UI library for Roblox exploiting, featuring a sleek space-themed design and smooth animations.
+A premium, space-themed UI library crafted for elite Roblox development. Features stunning animations and professional design elements.
 
 ## 🚀 Getting Started
 
-Load the library:
 ```lua
-local Nebula = loadstring(game:HttpGet('https://raw.githubusercontent.com/YourRepo/Nebula/main.lua'))()
+local Nebula = loadstring(game:HttpGet('https://raw.githubusercontent.com/Josiahhecks/Nebula-UI-lib/refs/heads/main/Complete.lua'))()
 
-Create a window:
+local Window = Nebula:CreateWindow("My Premium Script")
 
-local Window = Nebula:CreateWindow("My First Script")
+✨ Premium Features
+Create tabs with custom icons:
 
-📋 Features
-Create tabs:
-local MainTab = Window:AddTab("Main")
+local MainTab = Window:AddTab("Main", "Star") -- Star, Square, or Circle
 
-Add toggles:
-MainTab:AddToggle("Toggle Feature", false, function(state)
-    print("Toggle state:", state)
+Add stylish dividers:
+
+MainTab:AddDivider("Combat Features")
+
+Create premium buttons:
+
+MainTab:AddButton("Activate", function()
+    print("Activated!")
 end)
 
-Add sliders:
-MainTab:AddSlider("Walk Speed", 16, 500, 16, function(value)
-    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
-end)
-
-🎨 Customization
-Change theme colors:
-
+🎨 Theme Customization
 Nebula.Theme = {
-    Background = Color3.fromRGB(30, 30, 30),
-    Accent = Color3.fromRGB(0, 255, 128),
-    Text = Color3.fromRGB(255, 255, 255)
+    Primary = Color3.fromRGB(20, 20, 30),
+    Secondary = Color3.fromRGB(30, 30, 45),
+    Accent = Color3.fromRGB(96, 130, 255),
+    Text = Color3.fromRGB(240, 240, 255),
+    Divider = Color3.fromRGB(40, 40, 60)
 }
 
 ⚡ Key Features
-Modern Space Theme
-Smooth Animations
-Draggable Interface
-Multiple Tabs Support
-Toggle Animations
-Slider Functionality
+Custom Icon System
+Smooth Gradient Animations
+Premium Dividers
+Enhanced Tab System
+Professional Design
 Theme Customization
-Responsive Design
-🛠️ Examples
-Create a full featured window:
+Performance Optimized
+🌟 Elite Example
+local Window = Nebula:CreateWindow("Elite Script")
 
-local Window = Nebula:CreateWindow("Nebula Example")
-local MainTab = Window:AddTab("Main")
-
-MainTab:AddToggle("Feature", false, function(state)
-    print("Toggled:", state)
+local MainTab = Window:AddTab("Main", "Star")
+MainTab:AddDivider("Combat")
+MainTab:AddButton("Activate Powers", function()
+    print("Powers Activated!")
 end)
 
-MainTab:AddSlider("Speed", 0, 100, 16, function(value)
-    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
-end)
+local SecondTab = Window:AddTab("Settings", "Square")
+SecondTab:AddDivider("Options")
 
 📝 Credits
-Created by josiahhecks Version 1.0.0
+Created by josiahhecks Version 2.0.0
+
+View on GitHub
 
 
-This README provides clear instructions, examples, and showcases the library's key features in a professional format.
+This README perfectly showcases your UI library's premium features and professional design elements! Let me know if you'd like to add more examples or features to the documentation.
