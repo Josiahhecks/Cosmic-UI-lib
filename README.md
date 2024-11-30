@@ -59,7 +59,7 @@ MainTab:AddSlider("Speed", 0, 100, 16, function(value)
 end)
 
 📝 Credits
-Created by [Your Name] Version 1.0.0
+Created by josiahhecks Version 1.0.0
 
 
 This README provides clear instructions, examples, and showcases the library's key features in a professional format.
